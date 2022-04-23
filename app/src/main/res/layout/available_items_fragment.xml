@@ -16,9 +16,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:onClick="addItemActivity"
         android:background="@color/colorPrimary"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:onClick="addItemActivity"
         app:srcCompat="@android:drawable/ic_input_add"
+        tools:ignore="SpeakableTextPresentCheck"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
 

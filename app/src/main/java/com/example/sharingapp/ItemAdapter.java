@@ -62,7 +62,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         description_tv.setText(description);
 
         // AllItemFragments: itemlist_item shows title, description and status
-        if (fragment instanceof AllItemsFragment ) {
+            if (fragment instanceof AllItemsFragment ) {
             status_tv.setText(status);
         }
 

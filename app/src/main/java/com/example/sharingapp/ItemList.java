@@ -61,6 +61,16 @@ public class ItemList {
         return items.size();
     }
 
+    public ArrayList<Contact> getActiveBorrowers(){
+        ArrayList<Contact> active_borrowers = new ArrayList<>();
+        for (Item i: items){
+            if (i.getBorrower() != null){
+                active_borrowers.add(i.getBorrower());
+            }
+        }
+        return active_borrowers;
+    }
+
     public void loadItems(Context context) {
 
         try {
