@@ -27,6 +27,7 @@ public class Item {
         this.maker = maker;
         this.description = description;
         this.dimensions = dimensions;
+        this.borrower = null;
         this.status = "Available";
         addImage(image);
 
