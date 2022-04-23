@@ -78,7 +78,7 @@ public class ContactList {
     }
 
 
-    public void loadItems(Context context) {
+    public void loadContacts(Context context) {
         try(FileInputStream fis = context.openFileInput(FILENAME);
             InputStreamReader isr = new InputStreamReader(fis)){
             Gson gson = new Gson();
@@ -89,7 +89,7 @@ public class ContactList {
         }
     }
 
-    public void saveItems(Context context) {
+    public void saveContacts(Context context) {
         try(FileOutputStream fos = context.openFileOutput(FILENAME, 0);
             OutputStreamWriter osw = new OutputStreamWriter(fos)) {
             Gson gson = new Gson();
