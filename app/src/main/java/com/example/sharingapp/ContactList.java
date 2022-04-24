@@ -45,7 +45,7 @@ public class ContactList {
         contacts.remove(contact);
     }
 
-    public static Contact getContact(int index) {
+    public Contact getContact(int index) {
         return contacts.get(index);
     }
 
@@ -100,7 +100,7 @@ public class ContactList {
         }
     }
 
-    public static boolean isUsernameAvailable(String username){
+    public boolean isUsernameAvailable(String username){
         for (Contact c: contacts) {
             if (c.getUsername().equals(username)){
                 return false;
