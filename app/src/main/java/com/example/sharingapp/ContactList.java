@@ -17,7 +17,7 @@ public class ContactList {
     private static ArrayList<Contact> contacts;
     private String FILENAME = "contacts.sav";
 
-    public ContactList(){
+    public ContactList() {
         contacts = new ArrayList<>();
     }
 
@@ -29,9 +29,9 @@ public class ContactList {
         return contacts;
     }
 
-    public ArrayList<String> getAllUsernames(){
+    public ArrayList<String> getAllUsernames() {
         ArrayList<String> usernames = new ArrayList<>();
-        for (Contact c: contacts) {
+        for (Contact c : contacts) {
             usernames.add(c.getUsername());
         }
         return usernames;
@@ -59,18 +59,18 @@ public class ContactList {
             if (contact.getId().equals(c.getId())) {
                 return pos;
             }
-            pos = pos+1;
+            pos = pos + 1;
         }
         return -1;
     }
 
-    public boolean hasContact(Contact contact){
+    public boolean hasContact(Contact contact) {
         return contacts.contains(contact);
     }
 
-    public Contact getContactByUsername(String username){
-        for (Contact c: contacts) {
-            if (c.getUsername().equals(username)){
+    public Contact getContactByUsername(String username) {
+        for (Contact c : contacts) {
+            if (c.getUsername().equals(username)) {
                 return c;
             }
         }
@@ -79,10 +79,11 @@ public class ContactList {
 
 
     public void loadContacts(Context context) {
-        try(FileInputStream fis = context.openFileInput(FILENAME);
-            InputStreamReader isr = new InputStreamReader(fis)){
+        try (FileInputStream fis = context.openFileInput(FILENAME);
+             InputStreamReader isr = new InputStreamReader(fis)) {
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<Contact>>() {}.getType();
+            Type listType = new TypeToken<ArrayList<Contact>>() {
+            }.getType();
             contacts = gson.fromJson(isr, listType);
         } catch (IOException e) {
             contacts = new ArrayList<>();
@@ -90,8 +91,8 @@ public class ContactList {
     }
 
     public void saveContacts(Context context) {
-        try(FileOutputStream fos = context.openFileOutput(FILENAME, 0);
-            OutputStreamWriter osw = new OutputStreamWriter(fos)) {
+        try (FileOutputStream fos = context.openFileOutput(FILENAME, 0);
+             OutputStreamWriter osw = new OutputStreamWriter(fos)) {
             Gson gson = new Gson();
             gson.toJson(contacts, osw);
             osw.flush();
@@ -100,9 +101,9 @@ public class ContactList {
         }
     }
 
-    public boolean isUsernameAvailable(String username){
-        for (Contact c: contacts) {
-            if (c.getUsername().equals(username)){
+    public boolean isUsernameAvailable(String username) {
+        for (Contact c : contacts) {
+            if (c.getUsername().equals(username)) {
                 return false;
             }
         }

@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class ContactsActivity extends AppCompatActivity {
 
-    private ContactList contact_list;
-    private ContactList active_borrowers_list;
-    private ItemList item_list;
+    private ContactList contact_list = new ContactList();
+    private ContactList active_borrowers_list = new ContactList();
+    private ItemList item_list = new ItemList();
     private ListView my_contacts;
     private ArrayAdapter<Contact> adapter;
     private Context context;
@@ -28,6 +28,8 @@ public class ContactsActivity extends AppCompatActivity {
         context = getApplicationContext();
         contact_list.loadContacts(context);
         item_list.loadItems(context);
+        item_list = new ItemList();
+
 
         my_contacts = (ListView) findViewById(R.id.my_contacts);
         adapter = new ContactAdapter(ContactsActivity.this, contact_list.getContacts());
