@@ -7,19 +7,17 @@ public class Contact {
     private String email;
     private String id;
 
-    Contact(String username, String email, String id){
-        if (ContactList.isUsernameAvailable(username)){
-            this.username = username;
-            this.email = email;
-            if (id == null){
-                setId();
-            } else {
-                updateId(id);
-            }
+    Contact(String username, String email, String id) {
+        this.username = username;
+        this.email = email;
+        if (id == null) {
+            setId();
+        } else {
+            updateId(id);
         }
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
@@ -27,7 +25,7 @@ public class Contact {
         this.id = UUID.randomUUID().toString();
     }
 
-    public void updateId(String id){
+    public void updateId(String id) {
         this.id = id;
     }
 
