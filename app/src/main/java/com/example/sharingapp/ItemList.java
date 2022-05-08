@@ -87,20 +87,19 @@ public class ItemList {
         }
     }
 
-    public void saveItems(Context context) {
-        try {
-            FileOutputStream fos = context.openFileOutput(FILENAME, 0);
-            OutputStreamWriter osw = new OutputStreamWriter(fos);
+    public boolean saveItems(Context context) {
+        try (FileOutputStream fos = context.openFileOutput(FILENAME, 0);
+             OutputStreamWriter osw = new OutputStreamWriter(fos)){
             Gson gson = new Gson();
             gson.toJson(items, osw);
             osw.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
+
 
     public ArrayList<Item> filterItemsByStatus(String status){
         ArrayList<Item> selected_items = new ArrayList<>();
@@ -111,5 +110,7 @@ public class ItemList {
         }
         return selected_items;
     }
+
+
 }
 
