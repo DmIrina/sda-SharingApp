@@ -2,12 +2,12 @@ package com.example.sharingapp;
 
 import java.util.UUID;
 
-public class Contact {
+public class Contact extends Observable {
     private String username;
     private String email;
     private String id;
 
-    Contact(String username, String email, String id) {
+    public Contact(String username, String email, String id) {
         this.username = username;
         this.email = email;
         if (id == null) {
@@ -23,14 +23,17 @@ public class Contact {
 
     public void setId() {
         this.id = UUID.randomUUID().toString();
+        notifyObservers();
     }
 
     public void updateId(String id) {
         this.id = id;
+        notifyObservers();
     }
 
     public void setUsername(String username) {
         this.username = username;
+        notifyObservers();
     }
 
     public String getUsername() {
@@ -39,6 +42,7 @@ public class Contact {
 
     public void setEmail(String email) {
         this.email = email;
+        notifyObservers();
     }
 
     public String getEmail() {

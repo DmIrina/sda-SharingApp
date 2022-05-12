@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * ItemList class
  */
-public class ItemList {
+public class ItemList extends Observable{
 
     private static ArrayList<Item> items;
     private String FILENAME = "items.sav";
@@ -28,6 +28,7 @@ public class ItemList {
 
     public void setItems(ArrayList<Item> item_list) {
         items = item_list;
+        notifyObservers();
     }
 
     public ArrayList<Item> getItems() {
@@ -36,10 +37,12 @@ public class ItemList {
 
     public void addItem(Item item) {
         items.add(item);
+        notifyObservers();
     }
 
     public void deleteItem(Item item) {
         items.remove(item);
+        notifyObservers();
     }
 
     public Item getItem(int index) {
@@ -52,7 +55,7 @@ public class ItemList {
             if (item.getId().equals(i.getId())) {
                 return pos;
             }
-            pos = pos+1;
+            pos = pos + 1;
         }
         return -1;
     }
@@ -61,23 +64,14 @@ public class ItemList {
         return items.size();
     }
 
-    public ArrayList<Contact> getActiveBorrowers(){
-        ArrayList<Contact> active_borrowers = new ArrayList<>();
-        for (Item i: items){
-            if (i.getBorrower() != null){
-                active_borrowers.add(i.getBorrower());
-            }
-        }
-        return active_borrowers;
-    }
-
     public void loadItems(Context context) {
 
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
             InputStreamReader isr = new InputStreamReader(fis);
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<Item>>() {}.getType();
+            Type listType = new TypeToken<ArrayList<Item>>() {
+            }.getType();
             items = gson.fromJson(isr, listType); // temporary
             fis.close();
         } catch (FileNotFoundException e) {
@@ -85,14 +79,20 @@ public class ItemList {
         } catch (IOException e) {
             items = new ArrayList<Item>();
         }
+        notifyObservers();
     }
 
     public boolean saveItems(Context context) {
-        try (FileOutputStream fos = context.openFileOutput(FILENAME, 0);
-             OutputStreamWriter osw = new OutputStreamWriter(fos)){
+        try {
+            FileOutputStream fos = context.openFileOutput(FILENAME, 0);
+            OutputStreamWriter osw = new OutputStreamWriter(fos);
             Gson gson = new Gson();
             gson.toJson(items, osw);
             osw.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -100,6 +100,17 @@ public class ItemList {
         return true;
     }
 
+    public ArrayList<Contact> getActiveBorrowers() {
+
+        ArrayList<Contact> active_borrowers = new ArrayList<Contact>();
+        for (Item i : items) {
+            Contact borrower = i.getBorrower();
+            if (borrower != null) {
+                active_borrowers.add(borrower);
+            }
+        }
+        return active_borrowers;
+    }
 
     public ArrayList<Item> filterItemsByStatus(String status){
         ArrayList<Item> selected_items = new ArrayList<>();
@@ -110,7 +121,5 @@ public class ItemList {
         }
         return selected_items;
     }
-
-
 }
 

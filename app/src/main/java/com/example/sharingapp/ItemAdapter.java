@@ -2,7 +2,6 @@ package com.example.sharingapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +9,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
 
+
 /**
- * Item Adapter is responsible for what information is displayed in ListView entries.
+ * ItemAdapter is responsible for what information is displayed in ListView entries.
  */
 public class ItemAdapter extends ArrayAdapter<Item> {
 
@@ -33,14 +35,13 @@ public class ItemAdapter extends ArrayAdapter<Item> {
 
         // getItem(position) gets the "item" at "position" in the "items" ArrayList
         // (where "items" is a parameter in the ItemAdapter creator as seen above ^^)
-        // Note: getItem() is not a user-defined method in the Item/ItemList class!
-        // The "Item" in the method name is a coincidence...
         Item item = getItem(position);
+        ItemController item_controller = new ItemController(item);
 
-        String title = "Title: " + item.getTitle();
-        String description = "Description: " + item.getDescription();
-        Bitmap thumbnail = item.getImage();
-        String status = "Status: " + item.getStatus();
+        String title = "Title: " + item_controller.getTitle();
+        String description = "Description: " + item_controller.getDescription();
+        Bitmap thumbnail = item_controller.getImage();
+        String status = "Status: " + item_controller.getStatus();
 
         // Check if an existing view is being reused, otherwise inflate the view.
         if (convertView == null) {
@@ -61,12 +62,12 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         title_tv.setText(title);
         description_tv.setText(description);
 
-        // AllItemFragments: itemlist_item shows title, description and status
-            if (fragment instanceof AllItemsFragment ) {
+        // AllItemFragments: itemlist item shows title, description and status
+        if (fragment instanceof AllItemsFragment ) {
             status_tv.setText(status);
         }
 
-        // BorrowedItemsFragment/AvailableItemsFragment: itemlist_item shows title and description only
+        // BorrowedItemsFragment/AvailableItemsFragment: itemlist item shows title and description only
         if (fragment instanceof BorrowedItemsFragment || fragment instanceof AvailableItemsFragment) {
             status_tv.setVisibility(View.GONE);
         }
@@ -74,3 +75,4 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         return convertView;
     }
 }
+
