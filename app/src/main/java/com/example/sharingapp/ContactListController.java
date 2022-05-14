@@ -4,9 +4,12 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
+/**
+ * ContactListController is responsible for all communication between views and ContactList object
+ */
 public class ContactListController {
-    private ContactList contact_list;
 
+    private ContactList contact_list;
 
     public ContactListController(ContactList contact_list){
         this.contact_list = contact_list;
@@ -20,8 +23,8 @@ public class ContactListController {
         return contact_list.getContacts();
     }
 
-    public ArrayList<String> getAllUsernames() {
-        return contact_list.getAllUsernames();
+    public ArrayList<String> getAllUsernames(){
+        return  contact_list.getAllUsernames();
     }
 
     public boolean addContact(Contact contact, Context context) {
@@ -50,27 +53,23 @@ public class ContactListController {
         return contact_list.getSize();
     }
 
-    public int getIndex(Contact contact) {
-        return contact_list.getIndex(contact);
+    public Contact getContactByUsername(String username) {
+        return contact_list.getContactByUsername(username);
     }
 
     public boolean hasContact(Contact contact) {
         return contact_list.hasContact(contact);
     }
 
-    public Contact getContactByUsername(String username) {
-        return contact_list.getContactByUsername(username);
+    public int getIndex(Contact contact) {
+        return contact_list.getIndex(contact);
     }
 
     public void loadContacts(Context context) {
         contact_list.loadContacts(context);
     }
 
-    public boolean saveContacts(Context context) {
-        return contact_list.saveContacts(context);
-    }
-
-    public boolean isUsernameAvailable(String username) {
+    public boolean isUsernameAvailable(String username){
         return contact_list.isUsernameAvailable(username);
     }
 
@@ -81,5 +80,4 @@ public class ContactListController {
     public void removeObserver(Observer observer) {
         contact_list.removeObserver(observer);
     }
-
 }

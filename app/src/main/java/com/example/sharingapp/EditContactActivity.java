@@ -8,39 +8,43 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Editing a pre-existing contact consists of deleting the old contact and adding a new contact with the old
+ * contact's id.
+ * Note: You will not be able contacts which are "active" borrowers
+ */
 public class EditContactActivity extends AppCompatActivity implements Observer {
 
     private ContactList contact_list = new ContactList();
-    private Contact contact;
-    private EditText username;
-    private EditText email;
-    private Context context;
-    private int pos;
-
-    private ContactController contact_controller;
     private ContactListController contact_list_controller = new ContactListController(contact_list);
 
+    private Contact contact;
+    private ContactController contact_controller;
+
+    private EditText email;
+    private EditText username;
+    private Context context;
+    private int pos;
+    private boolean on_create_update = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_contact);
 
-        username = (EditText) findViewById(R.id.username);
-        email = (EditText) findViewById(R.id.email);
-
         Intent intent = getIntent();
         pos = intent.getIntExtra("position", 0);
 
         context = getApplicationContext();
-
         contact_list_controller.addObserver(this);
         contact_list_controller.loadContacts(context);
+        on_create_update = false;
     }
 
     public void saveContact(View view) {
 
         String email_str = email.getText().toString();
+
         if (email_str.equals("")) {
             email.setError("Empty field!");
             return;
@@ -51,23 +55,21 @@ public class EditContactActivity extends AppCompatActivity implements Observer {
             return;
         }
 
-
         String username_str = username.getText().toString();
-        String id = contact_controller.getId();
 
-        // Check that username is unique AND username is changed
-        // (Note: if username was not changed
+        // Check that username is unique AND username is changed (Note: if username was not changed
         // then this should be fine, because it was already unique.)
-
         if (!contact_list_controller.isUsernameAvailable(username_str) &&
-                !(contact_controller.getUsername().equals(username_str))) {
+                !(contact.getUsername().equals(username_str))){
             username.setError("Username already taken!");
             return;
         }
 
-        Contact updated_contact = new Contact(username_str, email_str, id);
+        // Reuse the contact id
+        String id_str = contact_controller.getId();
+        Contact updated_contact = new Contact(username_str, email_str, id_str);
 
-        //edit contact
+        // Edit Contact: replace contact with updated contact
         boolean success = contact_list_controller.editContact(contact, updated_contact, context);
         if (!success) {
             return;
@@ -78,25 +80,42 @@ public class EditContactActivity extends AppCompatActivity implements Observer {
     }
 
     public void deleteContact(View view) {
-        // delete contact
 
+        // Delete contact
         boolean success = contact_list_controller.deleteContact(contact, context);
         if (!success) {
             return;
         }
-        // End EditContactActivity
-        contact_list_controller.removeObserver(this);
 
+        // End EditContactActivity
         finish();
     }
 
+    /**
+     * Called when the activity is destroyed, thus we remove this activity as a listener
+     */
     @Override
-    public void update() {
-        contact = contact_list_controller.getContact(pos);
-        contact_controller = new ContactController(contact);
+    protected void onDestroy() {
+        super.onDestroy();
+        contact_list_controller.removeObserver(this);
+    }
 
-        username.setText(contact_controller.getUsername());
-        email.setText(contact_controller.getEmail());
+    /**
+     * Only need to update the view from the onCreate method
+     */
+    public void update(){
 
+        if (on_create_update) {
+
+            contact = contact_list_controller.getContact(pos);
+            contact_controller = new ContactController(contact);
+
+            username = (EditText) findViewById(R.id.username);
+            email = (EditText) findViewById(R.id.email);
+
+            // Update the view
+            username.setText(contact_controller.getUsername());
+            email.setText(contact_controller.getEmail());
+        }
     }
 }
