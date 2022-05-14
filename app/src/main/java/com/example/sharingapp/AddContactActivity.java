@@ -32,25 +32,41 @@ public class AddContactActivity extends AppCompatActivity {
         contact_list_controller.loadContacts(context);
     }
 
-    public void saveContact(View view) {
+    public boolean validateInput() {
 
         String username_str = username.getText().toString();
         String email_str = email.getText().toString();
-
         if (username_str.equals("")) {
             username.setError("Empty field!");
-            return;
+            return false;
+        }
+
+        if (email_str.equals("")) {
+            email.setError("Empty field!");
+            return false;
         }
 
         if (!email_str.contains("@")) {
             email.setError("Must be an email address!");
+            return false;
+        }
+
+        if (!contact_list_controller.isUsernameAvailable(username_str)) {
+            username.setError("Username already taken!");
+            return false;
+        }
+
+        return true;
+    }
+
+    public void saveContact(View view) {
+
+        if (!validateInput()) {
             return;
         }
 
-        if (!contact_list_controller.isUsernameAvailable(username_str)){
-            username.setError("Username already taken!");
-            return;
-        }
+        String username_str = username.getText().toString();
+        String email_str = email.getText().toString();
 
         Contact contact = new Contact(username_str, email_str, null);
 
